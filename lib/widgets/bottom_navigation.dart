@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:task_management_app/screens/task_screen.dart';
 import '../dummy/dummy_project.dart';
 import '../models/app_color.dart';
 import '../models/project_model.dart';
 import '../screens/home_screen.dart';
-import '../screens/profile_screen.dart';
 import '../screens/project_screen.dart';
 
 class BottomNagivation extends StatefulWidget {
@@ -28,7 +28,7 @@ class _BottomNagivationState extends State<BottomNagivation> {
     const HomeScreen(),
     // ProjectDetails(project: dummyProjects[0]),
     const ProjectScreen(),
-    const ProfileScreen(),
+    const TaskScreen(),
   ];
 
   @override
@@ -52,8 +52,8 @@ class _BottomNagivationState extends State<BottomNagivation> {
               backgroundColor: AppColors.background,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person, size: 30),
-              label: 'Profile',
+              icon: Icon(Icons.task_alt_rounded, size: 30),
+              label: 'To-Dos',
               backgroundColor: AppColors.background,
             ),
           ],
