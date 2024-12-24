@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:task_management_app/models/app_color.dart';
 
 class DateSelector extends StatelessWidget {
   const DateSelector({super.key});
@@ -26,7 +27,7 @@ class DateSelector extends StatelessWidget {
               _getWeekdayAbbreviation(date.weekday),
               style: TextStyle(
                 color: isSelected ? Colors.black : Colors.grey,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w500,
               ),
             ),
             const SizedBox(height: 4),
@@ -48,7 +49,7 @@ class DateSelector extends StatelessWidget {
                 : Text(
                     date.day.toString(),
                     style: const TextStyle(fontWeight: FontWeight.bold),
-                  ),
+                 ),
           ],
         );
       }).toList(),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:icon_decoration/icon_decoration.dart';
 import 'package:task_management_app/screens/task_screen.dart';
 import '../dummy/dummy_project.dart';
 import '../models/app_color.dart';
@@ -15,8 +16,24 @@ class BottomNagivation extends StatefulWidget {
 
 class _BottomNagivationState extends State<BottomNagivation> {
   int _selectedIndex = 0;
-  
-  final ProjectModel selectedProject = dummyProjects[0]; // Choose the first project for testing
+  late final ProjectModel selectedProject;  // Declare it as late
+
+  // Declare widget options without initializing them directly
+  late List<Widget> _widgetOptions;
+
+  @override
+  void initState() {
+    super.initState();
+    
+    selectedProject = dummyProjects[0]; // Choose the first project for testing
+
+   
+    _widgetOptions = <Widget>[
+      const HomeScreen(),
+      const ProjectScreen(), 
+      TaskScreen(project: selectedProject),
+    ];
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -24,44 +41,54 @@ class _BottomNagivationState extends State<BottomNagivation> {
     });
   }
 
-  final List<Widget> _widgetOptions = <Widget>[
-    const HomeScreen(),
-    // ProjectDetails(project: dummyProjects[0]),
-    const ProjectScreen(),
-    const TaskScreen(),
-  ];
-
   @override
   Widget build(BuildContext context) {
-    // final book = books[index];
 
     return Scaffold(
         body: Container(
           child: _widgetOptions.elementAt(_selectedIndex),
         ),
         bottomNavigationBar: BottomNavigationBar(
-          items: const <BottomNavigationBarItem>[
+          items: <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.home, size: 30),
+              icon: DecoratedIcon(
+                icon: Icon(
+                  Icons.home, 
+                  color: _selectedIndex == 0 ? AppColors.accent: Colors.transparent,
+                  size: 30,),
+                decoration: const IconDecoration(border: IconBorder()),
+              ),
               label: 'Home',
               backgroundColor: AppColors.background,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.folder, size: 30,),
+              icon: DecoratedIcon(
+                icon: Icon(
+                  Icons.folder,
+                  color: _selectedIndex == 1 ? AppColors.accent: Colors.transparent,
+                  size: 30,),
+                decoration: const IconDecoration(border: IconBorder()),
+              ),
               label: 'Project',
               backgroundColor: AppColors.background,
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.task_alt_rounded, size: 30),
+              icon: DecoratedIcon(
+                icon: Icon(
+                  Icons.task_alt_rounded,
+                  color: _selectedIndex == 2 ? AppColors.accent: Colors.transparent,
+                  size: 30,),
+                decoration: const IconDecoration(border: IconBorder()),
+              ),
               label: 'To-Dos',
               backgroundColor: AppColors.background,
             ),
           ],
           currentIndex: _selectedIndex,
-          selectedItemColor: AppColors.accent,
-          unselectedItemColor: Colors.grey[500],
+          selectedItemColor: AppColors.primary,
           onTap: _onItemTapped,
           type: BottomNavigationBarType.shifting,
+          unselectedItemColor: Colors.transparent,
         ));
   }
 }
