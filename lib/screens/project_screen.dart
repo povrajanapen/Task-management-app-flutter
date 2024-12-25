@@ -29,7 +29,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
     final ProjectModel? newProject = await Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const CreateProjectScreen(assignedMembers: [],),
+        builder: (context) => const CreateProjectScreen(project: null, assignedMembers: [],mode: ProjectMode.create,),
       ),
     );
     if (newProject != null) {
@@ -97,7 +97,9 @@ class _ProjectScreenState extends State<ProjectScreen> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => ProjectDetails(project: project),
+                      builder: (context) => ProjectDetails(
+                        project: project,
+                      ),
                     ),
                   );
                 },

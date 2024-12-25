@@ -43,9 +43,7 @@ class _TaskScreenState extends State<TaskScreen> {
       });
     });
   }
-
-  // Edit an existing task
-  // Edit an existing task
+  
 void _editTask(TaskModel task) async {
   final TaskModel? updatedTask = await Navigator.push(
     context,
@@ -66,6 +64,15 @@ void _editTask(TaskModel task) async {
     });
   }
 }
+void _toggleTaskCompletion(TaskModel task) {
+    setState(() {
+      int index = _tasks.indexWhere((t) => t.id == task.id);
+      if (index != -1) {
+        _tasks[index] = task;
+      }
+    });
+    TaskStorage.editTask(task);
+  }
 
 
  void _deleteTask(TaskModel task) async {
@@ -211,6 +218,7 @@ void _editTask(TaskModel task) async {
           tasks: _tasks,
           onEditTask: _editTask,
           onDeleteTask: _deleteTask,
+          onToggleTaskCompletion: _toggleTaskCompletion,
         ),
       ),
     );

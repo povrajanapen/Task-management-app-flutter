@@ -4,7 +4,6 @@ import 'package:task_management_app/dummy/dummy_members.dart';
 import 'package:task_management_app/dummy/dummy_project.dart';
 import 'package:task_management_app/models/app_color.dart';
 import 'package:task_management_app/models/task_model.dart';
-import 'package:task_management_app/screens/create_project.dart';
 import 'package:task_management_app/utils/task_utils.dart';
 import 'package:task_management_app/widgets/taskWidget/project_dropdown.dart';
 import '../models/project_model.dart';
@@ -39,6 +38,15 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
   TimeOfDay? selectedTime;
   DateTime? dueDate;
 
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _timeController.dispose();
+    _dateController.dispose();
+    _dateController.dispose();
+    super.dispose();
+  }
+
   // Initialization based on TaskMode (create or edit)
   @override
   void initState() {
@@ -63,22 +71,6 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
     // Access context-dependent properties after dependencies have changed
     if (selectedTime != null) {
       _timeController.text = selectedTime!.format(context); // Ensure this is after context is available
-    }
-  }
-
-
-  void _navigateToCreateProject() async {
-    final newProject = await Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => CreateProjectScreen(
-          assignedMembers: _selectedMembers.map(int.parse).toList(),
-        ),
-      ),
-    );
-
-    if (newProject != null) {
-      // Handle new project...
     }
   }
 

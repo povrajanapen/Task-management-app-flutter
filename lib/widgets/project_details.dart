@@ -2,14 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:task_management_app/models/app_color.dart';
 import 'package:task_management_app/models/project_model.dart';
 import 'package:task_management_app/models/task_model.dart';
+import 'package:task_management_app/storage/task_storage.dart';
 import 'package:task_management_app/widgets/assigned_members.dart';
 import 'package:task_management_app/widgets/tasks_list.dart';
+import '../screens/create_project.dart';
 import '../screens/create_task_screen.dart';
 
 class ProjectDetails extends StatefulWidget {
-  final ProjectModel project;
+  ProjectModel project;
 
-  const ProjectDetails({super.key, required this.project});
+  ProjectDetails({super.key, required this.project});
 
   @override
   State<ProjectDetails> createState() => _ProjectDetailsState();
@@ -57,7 +59,7 @@ class _ProjectDetailsState extends State<ProjectDetails> {
     if (updatedTask != null) {
       // Task has been updated, find the task and update it
       setState(() {
-        final index = widget.project.tasks.indexWhere((t) => t.id == task.id);
+        final index = widget.project.tasks.indexWhere((t) => t.id == updatedTask.id);
         if (index != -1) {
           widget.project.tasks[index] = updatedTask;
         }
@@ -70,6 +72,43 @@ class _ProjectDetailsState extends State<ProjectDetails> {
       widget.project.tasks.removeWhere((t) => t.id == task.id);
     });
   }
+
+  void _toggleTaskCompletion(TaskModel task) {
+    setState(() {
+      int index = widget.project.tasks.indexWhere((t) => t.id == task.id);
+      if (index != -1) {
+        widget.project.tasks[index] = task;
+      }
+    });
+  }
+
+
+  void _navigateToEditProject() async {
+    final updatedProject = await Navigator.push<ProjectModel>(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CreateProjectScreen(
+            mode: ProjectMode.edit,
+            project: widget.project,
+            assignedMembers: widget.project.assignedMembers, // Add this line
+            onProjectUpdated: (updatedProject) async {
+              setState(() {
+                widget.project = updatedProject; // Update local state
+              });
+
+              // Persist the updated project
+              await TaskStorage.editProject(updatedProject);
+            },
+          ),
+        ),
+      );
+
+      if (updatedProject != null) {
+        setState(() {
+          widget.project = updatedProject; 
+        });
+      }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -90,13 +129,11 @@ class _ProjectDetailsState extends State<ProjectDetails> {
         ),
         centerTitle: true,
         actions: [
-          IconButton(
-            icon: const Icon(Icons.edit, color: Colors.black),
-            onPressed: () {
-              // Edit Project Logic (optional)
-            },
-          ),
-        ],
+        IconButton(
+          icon: const Icon(Icons.edit, color: Colors.black),
+          onPressed: _navigateToEditProject,
+        ),
+      ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -121,6 +158,7 @@ class _ProjectDetailsState extends State<ProjectDetails> {
                   tasks: widget.project.tasks,
                   onEditTask: _editTask,
                   onDeleteTask: _deleteTask,
+                  onToggleTaskCompletion: _toggleTaskCompletion,
                 ),
               ),
           ],

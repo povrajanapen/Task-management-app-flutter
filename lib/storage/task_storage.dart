@@ -1,7 +1,9 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:task_management_app/models/task_model.dart';
 import 'package:task_management_app/dummy/dummy_task.dart';
-import 'package:task_management_app/utils/task_utils.dart'; 
+
+import '../dummy/dummy_project.dart';
+import '../models/project_model.dart';
 
 class TaskStorage {
   static const String _tasksKey = 'tasks';
@@ -9,7 +11,6 @@ class TaskStorage {
 
    // Initialize tasks with predefined dummy tasks and saved tasks
   static Future<void> initializeTasks() async {
-    await clearTasks();
     await _loadTasks();
     // Add predefined dummy tasks only if they don't already exist
     for (final dummy in dummyTasks) {
@@ -104,4 +105,69 @@ static Future<void> markTaskAsCompleted(String taskId) async {
     await prefs.remove(_tasksKey);
     _tasks.clear();
   }
+
+
+// project
+
+  static const String _projectsKey = 'projects';
+  static List<ProjectModel> _projects = [];
+
+  // Save projects to SharedPreferences
+  static Future<void> _saveProjects() async {
+    final prefs = await SharedPreferences.getInstance();
+    final projectJsonList = _projects.map((project) => project.toJsonString()).toList();
+    await prefs.setStringList(_projectsKey, projectJsonList);
+    print('Projects saved successfully: $projectJsonList');
+  }
+
+  // Load projects from SharedPreferences
+  static Future<void> _loadProjects() async {
+    final prefs = await SharedPreferences.getInstance();
+    final projectJsonList = prefs.getStringList(_projectsKey) ?? [];
+    print('Raw project data from SharedPreferences: $projectJsonList');
+
+    try {
+      final loadedProjects = projectJsonList
+          .map((projectJson) => ProjectModel.fromJsonString(projectJson))
+          .toList();
+      _projects = loadedProjects; // Update the project list
+      print('Projects loaded successfully: $loadedProjects');
+    } catch (e) {
+      print('Error loading projects from SharedPreferences: $e');
+    }
+  }
+
+  // Fetch all projects
+  static List<ProjectModel> getAllProjects() {
+    return _projects;
+  }
+
+  // Add a project
+  static Future<void> addProject(ProjectModel newProject) async {
+    _projects.add(newProject);
+    await _saveProjects();
+  }
+
+  // Edit a project
+  static Future<void> editProject(ProjectModel updatedProject) async {
+    final index = _projects.indexWhere((project) => project.projectId == updatedProject.projectId);
+
+    if (index != -1) {
+      _projects[index] = updatedProject;
+      await _saveProjects();
+    }
+  }
+
+  // Initialize projects (load from storage or set default)
+  static Future<void> initializeProjects() async {
+    await _loadProjects();
+    if (_projects.isEmpty) {
+      _projects = dummyProjects;
+      await _saveProjects();
+    }
+  }
+
 }
+
+
+

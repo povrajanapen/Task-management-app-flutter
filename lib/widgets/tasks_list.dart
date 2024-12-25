@@ -9,12 +9,14 @@ class TasksList extends StatefulWidget {
   final List<TaskModel> tasks;
   final Function(TaskModel) onEditTask;
   final Function(TaskModel) onDeleteTask;
+  final Function(TaskModel) onToggleTaskCompletion;
 
   const TasksList({
     super.key,
     required this.tasks,
     required this.onEditTask,
     required this.onDeleteTask,
+    required this.onToggleTaskCompletion,
   });
 
   @override
@@ -27,7 +29,6 @@ class _TasksListState extends State<TasksList> {
   @override
   void initState() {
     super.initState();
-    selectedTask = List.generate(widget.tasks.length, (index) => widget.tasks[index].status == 'Completed');
     _initializeSelectedTasks();
   }
 
@@ -41,7 +42,7 @@ class _TasksListState extends State<TasksList> {
 
   void _initializeSelectedTasks() {
     setState(() {
-      selectedTask = List<bool>.filled(widget.tasks.length, false);
+      selectedTask = widget.tasks.map((task) => task.status == 'Completed').toList();
     });
   }
 
@@ -58,14 +59,9 @@ class _TasksListState extends State<TasksList> {
     } else {
       task.status = "Not Started"; // Revert to original status (or other status like 'In Progress')
     }
-
-    // Update the task in storage
     TaskStorage.editTask(task);
-
-    
+    widget.onToggleTaskCompletion(task);
   }
-
-
   void _editTask(TaskModel task) {
     widget.onEditTask(task);
   }
@@ -119,10 +115,8 @@ Expanded(
               task.title,
               style: TextStyle(
                 fontWeight: FontWeight.w600,
-                decoration: selectedTask[index]
-                    ? TextDecoration.lineThrough
-                    : TextDecoration.none, 
-                color: selectedTask[index] && task.status == 'completed' ? Colors.grey : getTaskStatusColor(task),
+                decoration: selectedTask[index] ? TextDecoration.lineThrough : TextDecoration.none, 
+                color: selectedTask[index] ? Colors.grey : getTaskStatusColor(task),
               ),
             ),
             subtitle: Text(
@@ -185,18 +179,16 @@ Expanded(
                 Checkbox(
                   value: selectedTask[index],
                   onChanged: (value) => _toggleTaskCompletion(index, value),
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      );
-    },
+        );
+      },
+    ),
   ),
-),
-
-
-    ],
-    );
-  }
+  ],
+  );
+}
 }

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:task_management_app/models/app_color.dart';
 import 'package:task_management_app/widgets/project_details.dart';
 import 'package:task_management_app/widgets/task_card.dart';
-import '../models/task_filtering.dart';
+import '../utils/task_filtering.dart';
 import '../widgets/date_selector.dart';
 
 class HomeScreen extends StatelessWidget {

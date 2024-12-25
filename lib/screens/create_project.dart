@@ -4,9 +4,16 @@ import 'package:task_management_app/models/app_color.dart';
 import 'package:task_management_app/models/project_model.dart';
 import 'package:task_management_app/models/task_model.dart';
 
+import '../storage/task_storage.dart';
+
+enum ProjectMode{ create, edit}
+
 class CreateProjectScreen extends StatefulWidget {
+  final ProjectMode mode;
   final List<int> assignedMembers;
-  const CreateProjectScreen({super.key, required this.assignedMembers});
+  final void Function(ProjectModel updatedProject)? onProjectUpdated;
+  final ProjectModel? project;
+  const CreateProjectScreen({super.key, required this.assignedMembers, this.mode = ProjectMode.create, this.onProjectUpdated, required this.project});  
 
   @override
   State<CreateProjectScreen> createState() => _CreateProjectScreenState();
@@ -15,7 +22,9 @@ class CreateProjectScreen extends StatefulWidget {
 class _CreateProjectScreenState extends State<CreateProjectScreen> {
   final TextEditingController _nameController = TextEditingController();
   Color _selectedColor = Colors.pink[50]!;
-  final List <TaskModel> _tasks = [];
+  List <TaskModel> _tasks = [];
+  late List<int> _assignedMembers;
+  
   // List of color options to choose from
   final List<Color> _colorChoices = [
     Colors.pink[50]!,
@@ -25,6 +34,52 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
   ];
 
   @override
+  void dispose() {
+    _nameController.dispose();
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.mode == ProjectMode.edit && widget.project != null) {
+      _nameController.text = widget.project!.projectName;
+      _selectedColor = widget.project!.color;
+      _tasks = List.from(widget.project!.tasks);
+      _assignedMembers = List.from(widget.project!.assignedMembers);
+    } else {
+      _selectedColor = Colors.pink[50]!;
+      _tasks = [];
+      _assignedMembers = [];
+    }
+  }
+
+  void _saveProject() async {
+    if (_nameController.text.isNotEmpty) {
+      final newProject = ProjectModel(
+        projectId: widget.project?.projectId ?? DateTime.now().millisecondsSinceEpoch.toString(),
+        projectName: _nameController.text,
+        color: _selectedColor,
+        tasks: _tasks,
+        assignedMembers: _assignedMembers,
+      );
+
+      if (widget.mode == ProjectMode.create) {
+        await TaskStorage.addProject(newProject);
+      } else if (widget.mode == ProjectMode.edit) {
+        await TaskStorage.editProject(newProject);
+      }
+
+      Navigator.pop(context, newProject); // Pass the new/updated project back
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please enter a project name')),
+      );
+    }
+  }
+
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -32,7 +87,7 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
         elevation: 0,
         backgroundColor: Colors.transparent,
         title: Text(
-          'New Project',
+          widget.mode == ProjectMode.edit ? 'Edit Project' : 'New Project',
           style: AppColors.titleStyleNormal,
         ),
       ),
@@ -41,15 +96,15 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Display selected color preview as an Icon
+            // Icon and title
             if (_selectedColor != null) ...[
               const SizedBox(height: 10),
               Center(
                 child: DecoratedIcon(
                   icon: Icon(
-                    Icons.folder, // Example icon for the color preview
+                    Icons.folder, 
                     size: 150,
-                    color: _selectedColor, // Set the icon color to white
+                    color: _selectedColor, 
                   ),
                   decoration: const IconDecoration(
                     border: IconBorder(width: 2),
@@ -120,40 +175,24 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
             // create project button
             Center(
               child: ElevatedButton(
-                onPressed: (){
-                  if(_nameController.text.isNotEmpty){
-                    final newProject = ProjectModel(
-                      projectId: DateTime.now().toString(),
-                      projectName: _nameController.text,
-                      color: _selectedColor,
-                      tasks: _tasks,
-                      assignedMembers: widget.assignedMembers,
-                    );
-              
-                    Navigator.pop(context, newProject);
-                  } else {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(content: Text('Please enter a project name')),
-                    );
-                  }
-                },
+                onPressed: _saveProject,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.textSecondary,
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15), 
+                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                     side: const BorderSide(color: Colors.black, width: 0.5),
                   ),
                 ),
-                child: Text('Create New Project',
-                style: AppColors.bodyStyleBold,
+                child: Text(
+                  widget.mode == ProjectMode.edit ? 'Update Project' : 'Create New Project',
+                  style: AppColors.bodyStyleBold,
                 ),
-                ),
+              ),
             ),
           ],
         ),
       ),
-      
     );
   }
 }
