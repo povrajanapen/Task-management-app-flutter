@@ -16,7 +16,7 @@ class BottomNagivation extends StatefulWidget {
 
 class _BottomNagivationState extends State<BottomNagivation> {
   int _selectedIndex = 0;
-  late final ProjectModel selectedProject;  // Declare it as late
+  late final ProjectModel selectedProject;  
 
   // Declare widget options without initializing them directly
   late List<Widget> _widgetOptions;
@@ -25,7 +25,7 @@ class _BottomNagivationState extends State<BottomNagivation> {
   void initState() {
     super.initState();
     
-    selectedProject = dummyProjects[0]; // Choose the first project for testing
+    selectedProject = dummyProjects[0]; 
 
    
     _widgetOptions = <Widget>[

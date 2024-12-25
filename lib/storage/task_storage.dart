@@ -11,14 +11,14 @@ class TaskStorage {
 
    // Initialize tasks with predefined dummy tasks and saved tasks
   static Future<void> initializeTasks() async {
+    // await clearTasks();
     await _loadTasks();
-    // Add predefined dummy tasks only if they don't already exist
     for (final dummy in dummyTasks) {
       if (!_tasks.any((task) => task.id == dummy.id)) {
         _tasks.add(dummy);
       }
     }
-    _saveTasks(); // Save the combined list back to SharedPreferences
+    _saveTasks();
   }
 
   // Save tasks to SharedPreferences
@@ -46,43 +46,54 @@ class TaskStorage {
     }
   }
 
-  // Fetch all tasks (no filtering by project)
+  // get all tasks
   static List<TaskModel> getAllTasks() {
-    return _tasks; // Return all tasks
+    return _tasks; 
   }
 
-  // Fetch tasks for a specific project
+  // get tasks for a specific project
   static List<TaskModel> getTasksForProject(String projectId) {
     return _tasks.where((task) => task.projectId == projectId).toList();
   }
 
-  // Add a task only if it does not already exist
+// Add a task only if it does not already exist
   static Future<void> addTask(TaskModel newTask) async {
-  // Check if the task with the same ID already exists in the list
   bool taskExists = _tasks.any((task) => task.id == newTask.id);
-
-  if (!taskExists) {  // Only add the task if it doesn't already exist
+  if (!taskExists) { 
     _tasks.add(newTask);
-    await _saveTasks(); // Save the updated list
+    final project = _projects.firstWhere((project) => project.projectId == newTask.projectId);
+    _updateProjectAssignedMembers(project, newTask.assignedMembers);
+    await _saveTasks(); 
   } 
 }
 
+ static void _updateProjectAssignedMembers(ProjectModel project, List<int> taskAssignedMembers) {
+    // Add new task members to the project
+    project.assignedMembers.addAll(taskAssignedMembers);
+    // Remove duplicates and convert back to a list
+    project.assignedMembers = project.assignedMembers.toSet().toList();
+  }
+
 // edit task
   static Future<void> editTask(TaskModel updatedTask) async {
-  // Find the task index
   int index = _tasks.indexWhere((task) => task.id == updatedTask.id);
 
   if (index != -1) {
     // Update the task
+    final oldTask = _tasks[index];
     _tasks[index] = updatedTask;
-    await _saveTasks(); // Save the updated task list
+    final project = _projects.firstWhere((project) => project.projectId == updatedTask.projectId);
+    if (oldTask.projectId != updatedTask.projectId) {
+      // Remove old task members from the old project
+      _updateProjectAssignedMembers(project, oldTask.assignedMembers);
+    }
+    await _saveTasks(); 
+    await _saveProjects(); 
   } 
 }
 
-
 // delete task
 static Future<void> deleteTask(String taskId) async {
-  // Remove the task by ID
   _tasks.removeWhere((task) => task.id == taskId);
   await _saveTasks(); // Save the updated task list
   print('Task deleted successfully: $taskId');
@@ -93,11 +104,10 @@ static Future<void> markTaskAsCompleted(String taskId) async {
   // Find the task and update its status
   int index = _tasks.indexWhere((task) => task.id == taskId);
   if (index != -1) {
-    _tasks[index].status = 'Completed'; // Mark the task as completed
-    await _saveTasks(); // Save the updated task list
+    _tasks[index].status = 'Completed'; 
+    await _saveTasks(); 
   }
 }
-
 
   // Clear all tasks (optional)
   static Future<void> clearTasks() async {

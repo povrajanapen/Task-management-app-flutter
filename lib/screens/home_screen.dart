@@ -60,7 +60,6 @@ class HomeScreen extends StatelessWidget {
                   ? "You have $tasksDueTodayCount task${tasksDueTodayCount > 1 ? 's' : ''} almost due today."
                   : "No tasks due today.",
               style: TextStyle(
-              // Conditionally change the text color based on tasksDueTodayCount
               color: tasksDueTodayCount > 0
                   ? Colors.red 
                   : Colors.black,
@@ -70,7 +69,6 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 5),
-          // The project list is expanded to fill the screen space
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 16.0),

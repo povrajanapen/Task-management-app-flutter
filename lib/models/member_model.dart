@@ -2,7 +2,7 @@ class MemberModel {
   final int id;
   final String name;
   final String role;
-  final String avatarUrl; // Profile image URL
+  final String avatarUrl; 
 
   MemberModel({
     required this.id,

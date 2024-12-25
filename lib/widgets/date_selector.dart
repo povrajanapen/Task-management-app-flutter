@@ -56,7 +56,7 @@ class DateSelector extends StatelessWidget {
     );
   }
 
-  // Helper function to get the abbreviated weekday name
+  // function to get the abbreviated weekday name
   String _getWeekdayAbbreviation(int weekday) {
     switch (weekday) {
       case DateTime.monday:

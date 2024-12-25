@@ -46,7 +46,6 @@ class _ProjectDropdownState extends State<ProjectDropdown> {
           value: project.projectName, 
           child: Row(
             children: [
-              // Display project color as an indicator
               Container(
                 width: 16,
                 height: 16,

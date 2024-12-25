@@ -17,23 +17,23 @@ class ProjectModel {
     required this.assignedMembers,
   });
 
-  // Convert a ProjectModel to a JSON object
+  
   Map<String, dynamic> toJson() {
     return {
       'projectId': projectId,
       'projectName': projectName,
-      'color': color.value, // Store the color as an integer
+      'color': color.value, 
       'tasks': tasks.map((task) => task.toJsonString()).toList(),
       'assignedMembers': assignedMembers,
     };
   }
 
-  // Create a ProjectModel from a JSON object
+  
   factory ProjectModel.fromJson(Map<String, dynamic> json) {
     return ProjectModel(
       projectId: json['projectId'],
       projectName: json['projectName'],
-      color: Color(json['color']), // Restore the color from an integer
+      color: Color(json['color']), 
       tasks: (json['tasks'] as List<dynamic>)
           .map((taskJson) => TaskModel.fromJsonString(taskJson))
           .toList(),
@@ -41,7 +41,7 @@ class ProjectModel {
     );
   }
 
-  // Convert a ProjectModel to a JSON string
+  
   String toJsonString() {
     return jsonEncode(toJson());
   }

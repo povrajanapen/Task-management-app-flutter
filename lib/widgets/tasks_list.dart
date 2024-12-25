@@ -53,11 +53,11 @@ class _TasksListState extends State<TasksList> {
 
     final task = widget.tasks[index];
 
-    // If the task is marked as completed
+    
     if (selectedTask[index]) {
-      task.status = "Completed"; // Update the status to Completed
+      task.status = "Completed";
     } else {
-      task.status = "Not Started"; // Revert to original status (or other status like 'In Progress')
+      task.status = "Not Started"; 
     }
     TaskStorage.editTask(task);
     widget.onToggleTaskCompletion(task);
@@ -90,105 +90,105 @@ class _TasksListState extends State<TasksList> {
           ),
         ),
         const SizedBox(height: 8),
-Expanded(
-  child: ListView.builder(
-    itemCount: widget.tasks.length, // Don't filter out completed tasks
-    itemBuilder: (context, index) {
-      final task = widget.tasks[index]; // Access the task directly
+      Expanded(
+        child: ListView.builder(
+          itemCount: widget.tasks.length, 
+          itemBuilder: (context, index) {
+            final task = widget.tasks[index]; 
 
-      return Container(
-        margin: const EdgeInsets.only(bottom: 12),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-          border: Border.all(
-            color: selectedTask[index] ? Colors.green : Colors.black,
-            width: 1,
+            return Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(12),
+                border: Border.all(
+                  color: selectedTask[index] ? Colors.green : Colors.black,
+                  width: 1,
+                ),
+              ),
+              child: Material(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(12),
+                child: ListTile(
+                  contentPadding:
+                      const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                  title: Text(
+                    task.title,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      decoration: selectedTask[index] ? TextDecoration.lineThrough : TextDecoration.none, 
+                      color: selectedTask[index] ? Colors.grey : TaskUtils.getTaskStatusColor(task),
+                    ),
+                  ),
+                  subtitle: Text(
+                    'Due: ${DateFormat('dd MMMM yyyy').format(task.dueDate)} at ${task.dueTime.format(context)}',
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      // Priority
+                      Icon(
+                        Icons.flag,
+                        color: TaskUtils.getPriorityColor(task.priority),
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      // Status
+                      Icon(
+                        TaskUtils.getStatusIcon(task.status),
+                        color: TaskUtils.getStatusColor(task.status),
+                        size: 20,
+                      ),
+                      const SizedBox(width: 8),
+                      // Actions Menu
+                      PopupMenuButton<String>(
+                        onSelected: (value) {
+                          if (value == 'edit') {
+                            _editTask(task);
+                          } else if (value == 'delete') {
+                            _deleteTask(task);
+                          }
+                        },
+                        itemBuilder: (context) => [
+                          const PopupMenuItem<String>(
+                            value: 'edit',
+                            child: Row(
+                              children: [
+                                Icon(Icons.edit, color: Colors.black),
+                                SizedBox(width: 8),
+                                Text('Edit', style: TextStyle(color: Colors.black)),
+                              ],
+                            ),
+                          ),
+                          const PopupMenuItem<String>(
+                            value: 'delete',
+                            child: Row(
+                              children: [
+                                Icon(Icons.delete, color: Colors.red),
+                                SizedBox(width: 8),
+                                Text('Delete', style: TextStyle(color: Colors.red)),
+                              ],
+                            ),
+                          ),
+                        ],
+                        icon: const Icon(Icons.more_vert),
+                        tooltip: 'Options',
+                      ),
+                      const SizedBox(width: 8),
+                      // Completion Checkbox
+                      Checkbox(
+                        value: selectedTask[index],
+                        onChanged: (value) => _toggleTaskCompletion(index, value),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              );
+            },
           ),
         ),
-        child: Material(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(12),
-          child: ListTile(
-            contentPadding:
-                const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            title: Text(
-              task.title,
-              style: TextStyle(
-                fontWeight: FontWeight.w600,
-                decoration: selectedTask[index] ? TextDecoration.lineThrough : TextDecoration.none, 
-                color: selectedTask[index] ? Colors.grey : getTaskStatusColor(task),
-              ),
-            ),
-            subtitle: Text(
-              'Due: ${DateFormat('dd MMMM yyyy').format(task.dueDate)} at ${task.dueTime.format(context)}',
-              style: const TextStyle(fontSize: 12),
-            ),
-            trailing: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                // Priority
-                Icon(
-                  Icons.flag,
-                  color: TaskUtils.getPriorityColor(task.priority),
-                  size: 20,
-                ),
-                const SizedBox(width: 8),
-                // Status
-                Icon(
-                  TaskUtils.getStatusIcon(task.status),
-                  color: TaskUtils.getStatusColor(task.status),
-                  size: 20,
-                ),
-                const SizedBox(width: 8),
-                // Actions Menu
-                PopupMenuButton<String>(
-                  onSelected: (value) {
-                    if (value == 'edit') {
-                      _editTask(task);
-                    } else if (value == 'delete') {
-                      _deleteTask(task);
-                    }
-                  },
-                  itemBuilder: (context) => [
-                    const PopupMenuItem<String>(
-                      value: 'edit',
-                      child: Row(
-                        children: [
-                          Icon(Icons.edit, color: Colors.black),
-                          SizedBox(width: 8),
-                          Text('Edit', style: TextStyle(color: Colors.black)),
-                        ],
-                      ),
-                    ),
-                    const PopupMenuItem<String>(
-                      value: 'delete',
-                      child: Row(
-                        children: [
-                          Icon(Icons.delete, color: Colors.red),
-                          SizedBox(width: 8),
-                          Text('Delete', style: TextStyle(color: Colors.red)),
-                        ],
-                      ),
-                    ),
-                  ],
-                  icon: const Icon(Icons.more_vert),
-                  tooltip: 'Options',
-                ),
-                const SizedBox(width: 8),
-                // Completion Checkbox
-                Checkbox(
-                  value: selectedTask[index],
-                  onChanged: (value) => _toggleTaskCompletion(index, value),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    ),
-  ),
-  ],
-  );
-}
-}
+      ],
+      );
+    }
+    }

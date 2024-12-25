@@ -34,7 +34,7 @@ class _ProjectDetailsState extends State<ProjectDetails> {
       MaterialPageRoute(
         builder: (context) => CreateTaskScreen(
           project: widget.project,
-          mode: TaskMode.create, // Ensure this is in create mode
+          mode: TaskMode.create,
         ),
       ),
     );
@@ -50,14 +50,13 @@ class _ProjectDetailsState extends State<ProjectDetails> {
       MaterialPageRoute(
         builder: (context) => CreateTaskScreen(
           project: widget.project,
-          task: task, // Pass the task to edit
-          mode: TaskMode.edit, // Set mode to edit
+          task: task, 
+          mode: TaskMode.edit, 
         ),
       ),
     );
 
     if (updatedTask != null) {
-      // Task has been updated, find the task and update it
       setState(() {
         final index = widget.project.tasks.indexWhere((t) => t.id == updatedTask.id);
         if (index != -1) {
@@ -90,13 +89,11 @@ class _ProjectDetailsState extends State<ProjectDetails> {
           builder: (context) => CreateProjectScreen(
             mode: ProjectMode.edit,
             project: widget.project,
-            assignedMembers: widget.project.assignedMembers, // Add this line
+            assignedMembers: widget.project.assignedMembers, 
             onProjectUpdated: (updatedProject) async {
               setState(() {
-                widget.project = updatedProject; // Update local state
+                widget.project = updatedProject; 
               });
-
-              // Persist the updated project
               await TaskStorage.editProject(updatedProject);
             },
           ),

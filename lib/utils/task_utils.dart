@@ -41,9 +41,7 @@ class TaskUtils {
         return Colors.grey[100]!;
     }
   }
-}
-
-Color getTaskStatusColor(TaskModel task) {
+static Color getTaskStatusColor(TaskModel task) {
   final currentDateTime = DateTime.now();
   final taskDueDateTime = DateTime(
     task.dueDate.year,
@@ -58,3 +56,5 @@ Color getTaskStatusColor(TaskModel task) {
       ? Colors.red
       : Colors.black;
 }
+}
+

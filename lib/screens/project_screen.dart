@@ -33,7 +33,7 @@ class _ProjectScreenState extends State<ProjectScreen> {
       ),
     );
     if (newProject != null) {
-      _addProject(newProject);  // If a new project is created, add it
+      _addProject(newProject);  
     }
   }
   

@@ -10,7 +10,7 @@ List<TaskModel> dummyTasks = [
     dueTime: const TimeOfDay(hour: 11, minute: 00),
     priority: 'High',
     status: 'Not Started',
-    assignedMembers: ['1', '2'],
+    assignedMembers: [1, 2],
   ),
   TaskModel(
     id: "2",
@@ -20,7 +20,7 @@ List<TaskModel> dummyTasks = [
     dueTime: const TimeOfDay(hour: 11, minute: 00),
     priority: 'Medium',
     status: 'Not Started',
-    assignedMembers: ['3'],
+    assignedMembers: [3],
   ),
   TaskModel(
     id: "3",
@@ -30,7 +30,7 @@ List<TaskModel> dummyTasks = [
     dueTime: const TimeOfDay(hour: 1, minute: 00),
     priority: 'Low',
     status: 'In Progress',
-    assignedMembers: ['4'],
+    assignedMembers: [4],
   ),
   TaskModel(
     id: "4",
@@ -40,7 +40,7 @@ List<TaskModel> dummyTasks = [
     dueTime: const TimeOfDay(hour: 13, minute: 00),
     priority: 'Medium',
     status: 'In Progress',
-    assignedMembers: ['3','4'],
+    assignedMembers: [3, 4],
   ),
   TaskModel(
     id: "5",
@@ -50,7 +50,7 @@ List<TaskModel> dummyTasks = [
     dueTime: const TimeOfDay(hour: 17, minute: 00),
     priority: 'Medium',
     status: 'In Progress',
-    assignedMembers: ['3','4'],
+    assignedMembers: [3,4],
   ),
   TaskModel(
     id: "6",
@@ -60,7 +60,7 @@ List<TaskModel> dummyTasks = [
     dueTime: const TimeOfDay(hour: 13, minute: 00),
     priority: 'High',
     status: 'Not Started',
-    assignedMembers: ['2'],
+    assignedMembers: [2],
   ),
   TaskModel(
     id: "7",
@@ -70,7 +70,7 @@ List<TaskModel> dummyTasks = [
     dueTime: const TimeOfDay(hour: 15, minute: 00),
     priority: 'Medium',
     status: 'In Progress',
-    assignedMembers: ['1', '4'],
+    assignedMembers: [1, 4],
   ),
   TaskModel(
     id: "8",
@@ -80,7 +80,7 @@ List<TaskModel> dummyTasks = [
     dueTime: const TimeOfDay(hour: 01, minute: 00),
     priority: 'High',
     status: 'Not Started',
-    assignedMembers: ['1', '3'],
+    assignedMembers: [1, 3],
   ),
   TaskModel(
     id: "9",
@@ -90,6 +90,6 @@ List<TaskModel> dummyTasks = [
     dueTime: const TimeOfDay(hour: 17, minute: 00),
     priority: 'Low',
     status: 'In Progress',
-    assignedMembers: ['2', '5'],
+    assignedMembers: [2, 4],
   ),
 ];

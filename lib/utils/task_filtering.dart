@@ -20,7 +20,7 @@ List<ProjectModel> getProjectsWithTodayTasks(DateTime now) {
         }
         return null;
       })
-      .whereType<ProjectModel>() // Automatically filters out nulls
+      .whereType<ProjectModel>() 
       .toList();
 }
 

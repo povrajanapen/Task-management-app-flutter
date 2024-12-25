@@ -17,9 +17,7 @@ final List<ProjectModel> dummyProjects = [
     assignedMembers: groupedTasks['p1']
             ?.expand((task) => task.assignedMembers)
             .toSet() // remove duplicates
-            .map(int.parse)
-            .toList() ??
-        [],
+            .toList() ?? [],
   ),
   ProjectModel(
     projectId: 'p2',
@@ -30,9 +28,7 @@ final List<ProjectModel> dummyProjects = [
     assignedMembers: groupedTasks['p2']
             ?.expand((task) => task.assignedMembers)
             .toSet()
-            .map(int.parse)
-            .toList() ??
-        [],
+            .toList() ?? [],
   ),
   ProjectModel(
     projectId: 'p3',
@@ -42,8 +38,6 @@ final List<ProjectModel> dummyProjects = [
     assignedMembers: groupedTasks['p3']
             ?.expand((task) => task.assignedMembers)
             .toSet()
-            .map(int.parse)
-            .toList() ??
-        [],
+            .toList() ?? [],
   ),
 ];

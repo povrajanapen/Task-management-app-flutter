@@ -143,8 +143,8 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
               const SizedBox(height: 10),
             // Color Circles 
             Wrap(
-              spacing: 16.0, // Space between the color circles
-              runSpacing: 16.0, // Space between rows
+              spacing: 16.0, 
+              runSpacing: 16.0, 
               children: _colorChoices.map((color) {
                 return GestureDetector(
                   onTap: () {
@@ -160,8 +160,8 @@ class _CreateProjectScreenState extends State<CreateProjectScreen> {
                             decoration: BoxDecoration(
                               shape: BoxShape.circle,
                               border: Border.all(
-                                color: Colors.black, // Border color when selected
-                                width: 1, // Border width
+                                color: Colors.black, 
+                                width: 1, 
                               ),
                             ),
                           )

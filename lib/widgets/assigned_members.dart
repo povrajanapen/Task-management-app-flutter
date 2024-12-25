@@ -34,7 +34,7 @@ class AssignedMembers extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           SizedBox(
-            height: 60, // Constrain the height of the list
+            height: 60, 
             child: ListView.builder(
               scrollDirection: Axis.horizontal,
               itemCount: assignedMembers.length,
@@ -49,12 +49,12 @@ class AssignedMembers extends StatelessWidget {
                       ),
                       const SizedBox(height: 4),
                       SizedBox(
-                        width: 50, // Constrain name width
+                        width: 50, 
                         child: Text(
                           member.name,
                           style: AppColors.captionStyle,
                           overflow: TextOverflow.ellipsis,
-                          textAlign: TextAlign.center, // Align name to center
+                          textAlign: TextAlign.center, 
                         ),
                       ),
                     ],

@@ -51,10 +51,10 @@ class TaskCard extends StatelessWidget {
                             Text(
                               task.title,
                               style: AppColors.bodyStyle.copyWith(
-                                color: getTaskStatusColor(task),
+                                color: TaskUtils.getTaskStatusColor(task),
                               ),
                               overflow: TextOverflow.ellipsis, // Avoid overflow
-                              maxLines: 1, // Ensure single-line truncation
+                              maxLines: 1,
                             ),
 
                             // Deadline Info

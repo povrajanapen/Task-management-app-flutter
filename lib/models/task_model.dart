@@ -2,14 +2,14 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 
 class TaskModel {
-  String id;
-  String title;
-  String projectId;
-  DateTime dueDate;
-  TimeOfDay dueTime;
-  String priority;
+  final String id;
+  final String title;
+  final String projectId;
+  final DateTime dueDate;
+  final TimeOfDay dueTime;
+  final String priority;
   String status;
-  List<String> assignedMembers;
+  final List<int> assignedMembers;
 
   TaskModel({
     required this.id,
@@ -22,35 +22,35 @@ class TaskModel {
     required this.assignedMembers,
   });
 
-  // Serialize DateTime and TimeOfDay into a JSON-compatible format
+
   String toJsonString() {
     return jsonEncode({
       'id': id,
       'title': title,
       'projectId': projectId,
-      'dueDate': dueDate.toIso8601String(), // Convert DateTime to ISO string
-      'dueTime': '${dueTime.hour}:${dueTime.minute}', // Convert TimeOfDay to string
+      'dueDate': dueDate.toIso8601String(), 
+      'dueTime': '${dueTime.hour}:${dueTime.minute}', 
       'priority': priority,
       'status': status,
       'assignedMembers': assignedMembers,
     });
   }
 
-  // Deserialize JSON string back into a TaskModel object
+  
   factory TaskModel.fromJsonString(String jsonString) {
     final Map<String, dynamic> json = jsonDecode(jsonString);
     return TaskModel(
       id: json['id'],
       title: json['title'],
       projectId: json['projectId'],
-      dueDate: DateTime.parse(json['dueDate']), // Parse ISO string back to DateTime
+      dueDate: DateTime.parse(json['dueDate']), 
       dueTime: TimeOfDay(
-        hour: int.parse(json['dueTime'].split(':')[0]), // Extract hour from string
-        minute: int.parse(json['dueTime'].split(':')[1]), // Extract minute from string
+        hour: int.parse(json['dueTime'].split(':')[0]), 
+        minute: int.parse(json['dueTime'].split(':')[1]), 
       ),
       priority: json['priority'],
       status: json['status'],
-      assignedMembers: List<String>.from(json['assignedMembers']),
+      assignedMembers: List<int>.from(json['assignedMembers']),
     );
   }
 }

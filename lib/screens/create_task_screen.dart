@@ -31,7 +31,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _timeController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
-  final List<String> _selectedMembers = []; // List of selected member IDs as String
+  final List<int> _selectedMembers = []; // List of selected member IDs as String
   String _selectedPriority = "Low";
   String _selectedStatus = "Not Started";
   late ProjectModel _selectedProject;
@@ -70,7 +70,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
     super.didChangeDependencies();
     // Access context-dependent properties after dependencies have changed
     if (selectedTime != null) {
-      _timeController.text = selectedTime!.format(context); // Ensure this is after context is available
+      _timeController.text = selectedTime!.format(context); 
     }
   }
 
@@ -81,14 +81,14 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
         selectedTime != null) {
       final newTask = TaskModel(
         id: widget.mode == TaskMode.edit
-            ? widget.task!.id // If editing, use existing task's ID
-            : DateTime.now().millisecondsSinceEpoch.toString(), // Generate new ID for new task
+            ? widget.task!.id 
+            : DateTime.now().millisecondsSinceEpoch.toString(), 
         title: _titleController.text,
         dueDate: dueDate!,
         dueTime: selectedTime!,
         priority: _selectedPriority,
         status: _selectedStatus,
-        assignedMembers: List.from(_selectedMembers), // Ensure this is a List<String>
+        assignedMembers: List.from(_selectedMembers),
         projectId: _selectedProject.projectId,
       );
 
@@ -299,7 +299,7 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                   Wrap(
                     spacing: 8.0,
                     children: dummyMembers.map((member) {
-                      final isSelected = _selectedMembers.contains(member.id.toString());
+                      final isSelected = _selectedMembers.contains(member.id);
                       return ChoiceChip(
                         checkmarkColor: Colors.white,
                         avatar: CircleAvatar(
@@ -328,9 +328,9 @@ class _CreateTaskScreenState extends State<CreateTaskScreen> {
                         onSelected: (selected) {
                           setState(() {
                             if (selected) {
-                              _selectedMembers.add(member.id.toString());
+                              _selectedMembers.add(member.id);
                             } else {
-                              _selectedMembers.remove(member.id.toString());
+                              _selectedMembers.remove(member.id);
                             }
                           });
                         },

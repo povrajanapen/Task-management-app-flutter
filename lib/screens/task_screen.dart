@@ -18,18 +18,18 @@ class TaskScreen extends StatefulWidget {
 
 class _TaskScreenState extends State<TaskScreen> {
   late final ProjectModel _selectedProject;
-  List<TaskModel> _tasks = []; // Initialize as an empty list
+  List<TaskModel> _tasks = []; 
 
   @override
   void initState() {
     super.initState();
     _selectedProject = widget.project;
-    _initializeTasks(); // Load predefined and user-created tasks
+    _initializeTasks(); 
   }
 
   // Initialize tasks with predefined dummy tasks and saved tasks
   Future<void> _initializeTasks() async {
-    await TaskStorage.initializeTasks(); // Use the TaskStorage's method
+    await TaskStorage.initializeTasks(); 
     setState(() {
       _tasks = TaskStorage.getAllTasks();
     });
@@ -49,9 +49,9 @@ void _editTask(TaskModel task) async {
     context,
     MaterialPageRoute(
       builder: (context) => CreateTaskScreen(
-        project: _selectedProject, // Pass selected project
-        task: task, // Pass the task to edit
-        mode: TaskMode.edit, // Indicate that it's an edit mode
+        project: _selectedProject, 
+        task: task, 
+        mode: TaskMode.edit, 
       ),
     ),
   );
@@ -59,7 +59,7 @@ void _editTask(TaskModel task) async {
   if (updatedTask != null) {
     TaskStorage.editTask(updatedTask).then((_) {
       setState(() {
-        _tasks = TaskStorage.getAllTasks(); // Refresh tasks
+        _tasks = TaskStorage.getAllTasks(); 
       });
     });
   }
@@ -78,7 +78,7 @@ void _toggleTaskCompletion(TaskModel task) {
  void _deleteTask(TaskModel task) async {
   final bool confirm = await showDialog(
     context: context,
-    barrierDismissible: false, // Prevent closing the dialog by tapping outside
+    barrierDismissible: false, // Prevent dialog from closing on tap outside
     builder: (BuildContext context) {
       return Dialog(
         shape: RoundedRectangleBorder(
@@ -148,7 +148,7 @@ void _toggleTaskCompletion(TaskModel task) {
   if (confirm) {
     TaskStorage.deleteTask(task.id).then((_) {
       setState(() {
-        _tasks = TaskStorage.getAllTasks(); // Refresh tasks
+        _tasks = TaskStorage.getAllTasks(); 
       });
     });
   }
@@ -165,7 +165,7 @@ void _toggleTaskCompletion(TaskModel task) {
     );
 
     if (newTask != null) {
-      _addTask(newTask); // Add the new task if returned
+      _addTask(newTask); 
     }
   }
 
